@@ -20,6 +20,35 @@ const storage = multer.diskStorage({
 //Initialize upload variable with the storage
 const upload = multer({ storage: storage })
 
+//Route for the Home page: http://localhost/3000
+router.get('/', async (req, res) => {
+    const page = parseInt(req.query.page) || 1
+    const limit = 2
+
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+
+    const totalPosts = await Post.countDocuments().exec()
+
+    const posts = await Post.find()
+        .populate({ path: 'user', select: '-password' })
+        .sort({ _id: -1 })
+        .limit(limit)
+        .skip(startIndex)
+        .exec()
+
+    const pagination = {
+        currentPage: true,
+        totalPage: Math.ceil(totalPosts / limit),
+        hasNextPage: endIndex < totalPosts,
+        hasPrevPage: startIndex > 0,
+        nextPage: page + 1,
+        prevPage: page - 1
+    }
+
+    res.render('index', { title: 'Home Page', active: 'home', posts })
+})
+
 //route for posts page
 router.get('/posts', protectedRoute, async (req, res) => {
     try {
@@ -83,7 +112,7 @@ router.get('/post/:slug', async (req, res) => {
         }
 
         return res.render('posts/view-post', { title: 'View Post Page', active: 'view_post', post })
-        
+
     } catch (error) {
         console.error(error)
         req.flash('error', 'Something went wrong, try again!')
