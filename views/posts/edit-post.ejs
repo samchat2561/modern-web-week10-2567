@@ -1,0 +1,40 @@
+<%- include('../partials/header.ejs') %>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h2 class="fw-bold text-secondary">Edit Post</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <form action="/update-post/<%= post._id %>" method="post" enctype="multipart/form-data">
+
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" name="title" class="form-control" value="<%= post.title %>" id="title">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Content</label>
+                                <textarea name="content" class="form-control" rows="5" id="content">
+                                    <%= post.content %>
+                                </textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Upload Image</label>
+                                <input type="file" class="form-control" name="image" id="image">
+                                <div class="mt-2">
+                                    <img src="/uploads/<%= post.image %>" alt="<%= post.title %>" class="img-fluid img-thumbnail" width="100">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Update post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer.ejs') %>
