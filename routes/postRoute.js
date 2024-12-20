@@ -72,8 +72,24 @@ router.get('/edit-post/:id', protectedRoute, async (req, res) => {
 })
 
 //Route for edit posts page
-router.get('/post/:slug', protectedRoute, (req, res) => {
-    return res.render('posts/view-post', { title: 'View Post Page', active: 'view_post' })
+router.get('/post/:slug', async (req, res) => {
+    try {
+        const slug = req.params.slug
+        const post = await Post.findOne({ slug }).populate('user')
+
+        if (!post) {
+            req.flash('error', 'Post onot found!')
+            return res.redirect('/posts')
+        }
+
+        return res.render('posts/view-post', { title: 'View Post Page', active: 'view_post', post })
+        
+    } catch (error) {
+        console.error(error)
+        req.flash('error', 'Something went wrong, try again!')
+        return res.redirect('/posts')
+    }
+
 })
 
 //Handle Route for update posts page

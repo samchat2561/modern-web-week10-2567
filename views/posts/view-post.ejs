@@ -4,20 +4,14 @@
             <div class="col-lg-10 mx-auto">
                 <div class="card shadow">
                     <div class="card-body p-4">
-                        <img src="https://images3.alphacoders.com/135/1350069.jpeg" class="img-fluid" alt="walpaper">
+                        <img src="/uploads/<%= post.image %>" class="img-fluid" alt="<%= post.title %>">
                         <div
                             class="lead my-3 d-flex align-items-center fw-semibold justify-content-between text-secondary">
-                            <div>Auth: Mark Zuckerberg</div>
-                            <div>Created: 11-23-2024</div>
+                            <div>Auth: <%= post.user.name %></div>
+                            <div>Created: <%= post.createdAt.toLocaleDateString() %></div>
                         </div>
-                        <h1 class="text-secondary fw-bold">
-                            Wallpaper
-                        </h1>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, est non animi saepe
-                            itaque accusamus beatae dicta, laboriosam odit quisquam, aperiam quia similique quae
-                            illo ab ipsam eum repellat fugit!
-                        </p>
+                        <h1 class="text-secondary fw-bold"><%= post.title %></h1>
+                        <p><%= post.content %></p>
                     </div>
                 </div>
             </div>
