@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
         .exec()
 
     const pagination = {
-        currentPage: true,
+        currentPage: page,
         totalPage: Math.ceil(totalPosts / limit),
         hasNextPage: endIndex < totalPosts,
         hasPrevPage: startIndex > 0,
@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
         prevPage: page - 1
     }
 
-    res.render('index', { title: 'Home Page', active: 'home', posts })
+    res.render('index', { title: 'Home Page', active: 'home', posts, pagination })
 })
 
 //route for posts page
