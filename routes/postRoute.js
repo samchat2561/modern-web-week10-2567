@@ -110,7 +110,7 @@ router.post('/update-post/:id', protectedRoute, upload.single('image'), async (r
     }
 })
 
-//Route for create posts page
+//Handle Route for create posts page
 router.post('/create-post', protectedRoute, upload.single('image'), async (req, res) => {
     // req.file is the `image` file
     try {
@@ -136,6 +136,36 @@ router.post('/create-post', protectedRoute, upload.single('image'), async (req, 
         return res.redirect('/create-post')
     }
 
+})
+
+//Handle Route for delet posts page
+router.post('/delete-post/:id', protectedRoute, async (req, res) => {
+    try {
+        const postId = req.params.id
+        const post = await Post.findById(postId)
+
+        if (!post) {
+            req.flash('error', 'Something went wrong, try again!')
+            return res.redirect('/posts')
+        }
+
+        await User.updateOne({ _id: req.session.user._id }, { $pull: { posts: postId } })
+        await Post.deleteOne({ _id: postId })
+
+        unlink(path.join(process.cwd(), 'uploads') + '/' + post.image, (err) => {
+            if (err) {
+                console.error(err)
+            }
+        })
+
+        req.flash('success', 'Post deleted successfully!')
+        return res.redirect('/posts')
+
+    } catch (error) {
+        console.error(error)
+        req.flash('error', 'Something went wrong, try again!')
+        return res.redirect('/posts')
+    }
 })
 
 export default router
